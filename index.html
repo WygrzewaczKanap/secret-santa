@@ -7,7 +7,43 @@
     <title>Secret Santa</title>
   </head>
   <body>
-    <div id="app"></div>
+    <div id="app">
+      <div class="container">
+        <div class="sidebar">
+          <h2>Grupy</h2>
+          <div id="groupsList"></div>
+        </div>
+        
+        <div class="main-content">
+          <h1>Secret Santa</h1>
+          
+          <div class="group-section">
+            <h2>Utwórz grupę</h2>
+            <input type="text" id="groupName" placeholder="Nazwa grupy">
+            <button id="createGroup">Utwórz grupę</button>
+          </div>
+
+          <div class="selected-group-info">
+            <h3>Wybrana grupa: <span id="currentGroupName">Brak</span></h3>
+          </div>
+
+          <div class="participant-section">
+            <h2>Dodaj uczestnika</h2>
+            <input type="text" id="participantName" placeholder="Imię uczestnika">
+            <button id="addParticipant">Dodaj uczestnika</button>
+          </div>
+
+          <div class="draw-section">
+            <button id="drawButton">Przeprowadź losowanie</button>
+          </div>
+
+          <div class="results-section">
+            <h2>Wyniki losowania</h2>
+            <div id="results"></div>
+          </div>
+        </div>
+      </div>
+    </div>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

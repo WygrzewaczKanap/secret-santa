@@ -50,4 +50,11 @@ interface Participant {
     getGroupAssignments(groupName: string): Assignment[] {
       return this.assignments.get(groupName) || [];
     }
+  
+    getGroups(): { name: string, participants: Participant[] }[] {
+      return Array.from(this.groups.entries()).map(([name, participants]) => ({
+        name,
+        participants: [...participants]
+      }));
+    }
   }

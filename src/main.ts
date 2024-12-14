@@ -2,37 +2,43 @@ import './style.css'
 import { SecretSantaManager } from './logic'
 
 const manager = new SecretSantaManager();
-
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <div class="container">
-    <h1>Secret Santa</h1>
-    
-    <div class="group-section">
-      <h2>Utwórz grupę</h2>
-      <input type="text" id="groupName" placeholder="Nazwa grupy">
-      <button id="createGroup">Utwórz grupę</button>
-    </div>
-
-    <div class="participant-section">
-      <h2>Dodaj uczestnika</h2>
-      <input type="text" id="participantName" placeholder="Imię uczestnika">
-      <button id="addParticipant">Dodaj uczestnika</button>
-    </div>
-
-    <div class="draw-section">
-      <button id="drawButton">Przeprowadź losowanie</button>
-    </div>
-
-    <div class="results-section">
-      <h2>Wyniki losowania</h2>
-      <div id="results"></div>
-    </div>
-  </div>
-`
-
 let currentGroup = '';
 
-// manager.createGroup
+function updateGroupsList() {
+  const groupsList = document.querySelector('#groupsList');
+  if (!groupsList) return;
+
+  const groups = manager.getGroups();
+  
+  groupsList.innerHTML = groups.map(group => `
+    <div class="group-item">
+      <h3 class="group-name ${group.name === currentGroup ? 'selected' : ''}" data-group="${group.name}">
+        ${group.name}
+      </h3>
+      <ul class="participants-list">
+        ${group.participants.map(participant => `
+          <li>${participant.name}</li>
+        `).join('')}
+      </ul>
+    </div>
+  `).join('');
+
+  document.querySelectorAll('.group-name').forEach(groupElement => {
+    groupElement.addEventListener('click', (e) => {
+      const groupName = (e.target as HTMLElement).dataset.group;
+      if (groupName) {
+        selectGroup(groupName);
+      }
+    });
+  });
+}
+
+function selectGroup(groupName: string) {
+  currentGroup = groupName;
+  document.querySelector('#currentGroupName')!.textContent = groupName;
+  updateGroupsList();
+}
+
 document.querySelector('#createGroup')?.addEventListener('click', () => {
   const groupNameInput = document.querySelector<HTMLInputElement>('#groupName');
   const groupName = groupNameInput?.value;
@@ -41,18 +47,18 @@ document.querySelector('#createGroup')?.addEventListener('click', () => {
     try {
       manager.createGroup(groupName);
       currentGroup = groupName;
-      alert(`Utworzono grupę: ${groupName}`);
       groupNameInput!.value = '';
+      updateGroupsList();
+      selectGroup(groupName);
     } catch (error) {
       alert(error);
     }
   }
 });
 
-// manager.addParticipantToGroup
 document.querySelector('#addParticipant')?.addEventListener('click', () => {
   if (!currentGroup) {
-    alert('Najpierw utwórz grupę!');
+    alert('Najpierw wybierz grupę!');
     return;
   }
 
@@ -62,18 +68,17 @@ document.querySelector('#addParticipant')?.addEventListener('click', () => {
   if (participantName) {
     try {
       manager.addParticipantToGroup(currentGroup, participantName);
-      alert(`Dodano uczestnika: ${participantName}`);
       participantNameInput!.value = '';
+      updateGroupsList();
     } catch (error) {
       alert(error);
     }
   }
 });
 
-// manager.drawForGroup
 document.querySelector('#drawButton')?.addEventListener('click', () => {
   if (!currentGroup) {
-    alert('Najpierw utwórz grupę!');
+    alert('Najpierw wybierz grupę!');
     return;
   }
 
@@ -95,3 +100,5 @@ document.querySelector('#drawButton')?.addEventListener('click', () => {
     alert(error);
   }
 });
+
+updateGroupsList();
