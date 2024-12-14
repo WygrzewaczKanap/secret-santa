@@ -32,7 +32,7 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
 
 let currentGroup = '';
 
-// Obsługa tworzenia grupy
+// manager.createGroup
 document.querySelector('#createGroup')?.addEventListener('click', () => {
   const groupNameInput = document.querySelector<HTMLInputElement>('#groupName');
   const groupName = groupNameInput?.value;
@@ -49,7 +49,7 @@ document.querySelector('#createGroup')?.addEventListener('click', () => {
   }
 });
 
-// Obsługa dodawania uczestnika
+// manager.addParticipantToGroup
 document.querySelector('#addParticipant')?.addEventListener('click', () => {
   if (!currentGroup) {
     alert('Najpierw utwórz grupę!');
@@ -70,7 +70,7 @@ document.querySelector('#addParticipant')?.addEventListener('click', () => {
   }
 });
 
-// Obsługa losowania
+// manager.drawForGroup
 document.querySelector('#drawButton')?.addEventListener('click', () => {
   if (!currentGroup) {
     alert('Najpierw utwórz grupę!');
